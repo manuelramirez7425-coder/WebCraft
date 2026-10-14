@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebCraft — Basic Web Page Creation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --bg:#0a1022;
+  --bg2:#101a34;
+  --panel:#182441;
+  --panel2:#202f50;
+  --text:#f5f7ff;
+  --muted:#aab4cc;
+  --line:#293755;
+  --purple:#8b55ff;
+  --purple2:#a26aff;
+  --cyan:#20c9e8;
+  --green:#35e39b;
+  --pink:#ff62c5;
+  --shadow:0 16px 35px rgba(0,0,0,.28);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(circle at 86% 9%,rgba(139,85,255,.09),transparent 24%),
+    radial-gradient(circle at 15% 90%,rgba(32,201,232,.05),transparent 22%);
+}
+a{color:inherit;text-decoration:none}
+.page{
+  min-height:100vh;
+  padding:30px 5.7vw 56px;
+  position:relative;
+  overflow:hidden;
+}
+.page:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.7),transparent 85%);
+}
+.topbar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:18px;border-bottom:1px solid var(--line);
+  position:relative;z-index:3;
+}
+.brand{
+  color:var(--cyan);font-size:16px;font-weight:800;
+  letter-spacing:.02em;
+}
+.kicker,.count{
+  color:#9ca8c0;font-size:11px;font-weight:700;
+  letter-spacing:.02em;text-transform:uppercase;
+}
+.hero{
+  min-height:calc(100vh - 80px);
+  display:grid;grid-template-columns:1.35fr .65fr;gap:50px;
+  align-items:center;position:relative;z-index:2;
+}
+.eyebrow{
+  display:inline-flex;align-items:center;
+  background:#1b2948;border:1px solid #263657;
+  color:var(--cyan);padding:8px 29px;border-radius:7px;
+  box-shadow:0 7px 18px rgba(0,0,0,.22);
+  font-size:11px;font-weight:800;letter-spacing:.02em;
+  text-transform:uppercase;margin-bottom:42px;
+}
+h1{
+  font-size:clamp(54px,7.2vw,94px);
+  line-height:1.02;letter-spacing:-.055em;
+  font-weight:800;text-transform:uppercase;
+}
+h2{
+  font-size:clamp(42px,5.5vw,70px);
+  line-height:1.02;letter-spacing:-.045em;
+  font-weight:800;text-transform:uppercase;
+}
+h3{font-weight:700}
+.lead{
+  max-width:700px;color:#b5bed0;font-size:17px;
+  margin:32px 0;
+}
+.meta{font-size:14px;color:#a5afc4;margin-top:28px;display:grid;gap:9px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,var(--purple2),var(--purple));
+  color:white;padding:18px 30px;border-radius:9px;
+  font-size:12px;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 9px 24px rgba(139,85,255,.28);
+  transition:.2s;
+}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.hero-art{
+  height:620px;position:relative;border:0;background:transparent;
+}
+.hero-art .circle{
+  position:absolute;width:280px;height:280px;border-radius:50%;
+  right:10px;top:15px;background:transparent;
+  border:31px solid var(--purple);
+  box-shadow:0 0 0 30px rgba(49,68,108,.58),0 22px 55px rgba(0,0,0,.2);
+}
+.hero-art .circle:after{
+  content:"";position:absolute;width:180px;height:180px;
+  border-radius:50%;border:1px solid rgba(139,85,255,.25);
+  left:18px;top:18px;
+}
+.hero-art:before{
+  content:"";position:absolute;width:250px;height:250px;border-radius:50%;
+  right:-10px;bottom:35px;background:rgba(35,52,88,.72);
+  box-shadow:inset 0 0 0 0,0 20px 45px rgba(0,0,0,.16);
+}
+.hero-art:after{
+  content:"";position:absolute;width:160px;height:160px;border-radius:50%;
+  right:35px;bottom:80px;border:31px solid var(--cyan);
+  box-shadow:0 0 0 1px rgba(32,201,232,.1);
+}
+.hero-art .label{
+  position:absolute;right:72px;top:307px;
+  color:#fff;font-size:16px;font-weight:800;z-index:2;
+}
+.nav-page{background:var(--bg)}
+.section-head{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin:38px 0 34px;position:relative;z-index:2;
+}
+.section-head .eyebrow{display:none}
+.nav-page h2{text-transform:uppercase;font-size:42px}
+.nav-page .lead{margin:18px 0 0;font-size:15px}
+.nav-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:20px;
+  position:relative;z-index:2;
+}
+.nav-card{
+  min-height:105px;padding:17px 20px;
+  border:1px solid #263657;border-radius:15px;
+  background:linear-gradient(135deg,#1a2847,#182441);
+  box-shadow:var(--shadow);
+  display:grid;grid-template-columns:48px 1fr 30px;gap:10px;
+  align-items:center;transition:.2s;position:relative;overflow:hidden;
+}
+.nav-card:before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--purple);opacity:.9;
+}
+.nav-card:nth-child(2):before{background:var(--cyan)}
+.nav-card:nth-child(3):before{background:var(--pink)}
+.nav-card:nth-child(4):before{background:var(--green)}
+.nav-card:nth-child(5):before{background:var(--cyan)}
+.nav-card:nth-child(6):before{background:var(--purple)}
+.nav-card:hover{transform:translateY(-3px);border-color:#41557d;background:#213052}
+.num{
+  font-size:25px;font-weight:800;color:var(--purple);
+}
+.nav-card:nth-child(2) .num{color:var(--cyan)}
+.nav-card:nth-child(3) .num{color:var(--pink)}
+.nav-card:nth-child(4) .num{color:var(--green)}
+.nav-card:nth-child(5) .num{color:var(--cyan)}
+.nav-card:nth-child(6) .num{color:var(--purple)}
+.nav-card h3{font-size:17px;line-height:1.15}
+.nav-card p{font-size:12px;color:#aab4ca;margin-top:7px}
+.nav-card:after{
+  content:"↗";display:grid;place-items:center;
+  width:24px;height:24px;background:#b9d2df;color:#274056;
+  border-radius:2px;font-weight:900;
+}
+.back{
+  display:inline-flex;margin-top:28px;padding:16px 26px;
+  border-radius:8px;background:linear-gradient(135deg,var(--purple2),var(--purple));
+  font-size:12px;font-weight:800;box-shadow:0 9px 24px rgba(139,85,255,.24);
+}
+.content-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:start;position:relative;z-index:2;
+}
+.big-copy{
+  font-size:clamp(32px,4vw,54px);line-height:1.05;
+  letter-spacing:-.04em;font-weight:800;text-transform:none;
+}
+.small-copy{color:#aeb8cc;max-width:650px;font-size:17px}
+.quote-box{
+  margin-top:50px;padding:30px 32px;
+  border:1px solid #293958;border-radius:13px;
+  background:#121c34;color:#dbe2f0;
+  box-shadow:var(--shadow);
+}
+.cards4{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
+  margin-top:42px;position:relative;z-index:2;
+}
+.info-card{
+  background:linear-gradient(145deg,#1b2947,#17223d);
+  border:1px solid #293958;border-radius:15px;
+  padding:26px;min-height:180px;box-shadow:var(--shadow);
+}
+.info-card .num{font-size:15px}
+.info-card h3{margin:30px 0 8px;font-size:19px}
+.info-card p{color:#aab4c9;font-size:13px}
+.takeaways{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:18px;
+  margin-top:38px;position:relative;z-index:2;
+}
+.take{
+  border:1px solid #293958;border-radius:12px;padding:20px;
+  background:#121c34;color:#cfd7e7;transition:.2s;
+}
+.take:hover{border-color:#53688e;transform:translateY(-2px)}
+.take b{display:block;color:var(--cyan);font-size:11px;letter-spacing:.1em;margin-bottom:7px}
+.reflection{
+  margin-top:40px;padding:30px;max-width:820px;
+  background:linear-gradient(135deg,#182542,#101a31);
+  border:1px solid #2a3a5b;border-radius:14px;box-shadow:var(--shadow);
+}
+.reflection p{color:#aeb8cb;margin-top:10px}
+.demo{
+  display:grid;grid-template-columns:1fr 1fr;gap:45px;
+  align-items:center;margin-top:45px;position:relative;z-index:2;
+}
+.browser{
+  border:1px solid #314466;border-radius:13px;background:#0e172b;
+  box-shadow:0 25px 60px rgba(0,0,0,.34);overflow:hidden;
+}
+.browser-top{
+  padding:12px 15px;border-bottom:1px solid #293957;
+  font-size:10px;color:#7e8ca7;background:#121d35;
+}
+.browser-body{padding:45px;min-height:300px;background:#111c32}
+.browser-body h3{font-size:48px;line-height:.9;letter-spacing:-.05em}
+.browser-body p{color:#8997b1;margin-top:17px}
+.link-demo{
+  display:inline-block;margin-top:25px;padding:12px 17px;
+  background:var(--cyan);color:#071424;border-radius:6px;
+  font-size:10px;font-weight:900;text-transform:uppercase;
+}
+footer{
+  padding:28px 5vw;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#7f8ba4;
+}
+#conclusion .section-head{margin-bottom:50px}
+#conclusion h2{font-size:clamp(48px,6vw,76px)}
+#conclusion .reflection h2{color:#fff}
+@media(max-width:800px){
+ .page{padding:24px 22px 45px}
+ .topbar{gap:15px}.kicker{display:none}
+ .hero,.content-grid,.demo{grid-template-columns:1fr}
+ .hero{min-height:auto;padding:70px 0}
+ .hero-art{height:350px}
+ .hero-art .circle{width:190px;height:190px;border-width:23px;right:10px}
+ .hero-art:before{width:180px;height:180px}
+ .hero-art:after{width:110px;height:110px;border-width:23px;right:35px}
+ .hero-art .label{right:38px;top:215px}
+ .nav-grid,.cards4,.takeaways{grid-template-columns:1fr}
+ .section-head{margin-top:35px}
+ .nav-card{grid-template-columns:43px 1fr 30px}
+ h1{font-size:58px}
+}
+</style>
+
+<style>
+/* --- WebCraft presentation-inspired polish --- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap');
+body{font-family:Inter,Arial,Helvetica,sans-serif}
+.page{border-bottom:1px solid var(--line)}
+.page:after{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.25;
+ background-image:linear-gradient(to right,transparent 0,transparent calc(50% - .5px),var(--line) calc(50% - .5px),var(--line) 50%,transparent 50%);
+ mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+.topbar,.hero,.section-head,.content-grid,.cards4,.demo,.takeaways,.back{position:relative;z-index:2}
+.brand{font-family:"DM Mono",monospace}
+.kicker,.eyebrow,.count,.num,.back,.btn,.link-demo,.browser-top{
+ font-family:"DM Mono",monospace;
+}
+h1,h2,h3,.big-copy{font-weight:800}
+h1{font-size:clamp(58px,10vw,145px);line-height:.79}
+h2{font-size:clamp(42px,7vw,92px)}
+.hero-art{overflow:hidden}
+.hero-art:before{
+ content:"";position:absolute;width:100%;height:1px;background:var(--line);top:50%;left:0;
+}
+.hero-art:after{
+ content:"01";position:absolute;right:20px;top:20px;font:500 12px "DM Mono",monospace;
+}
+.hero-art .circle{z-index:1;box-shadow:45px 35px 0 rgba(17,17,17,.08)}
+.nav-card{position:relative;overflow:hidden}
+.nav-card:after{
+ content:"";position:absolute;width:90px;height:90px;border:1px solid currentColor;border-radius:50%;
+ right:-45px;bottom:-45px;opacity:.18;transition:.25s;
+}
+.nav-card:hover:after{transform:scale(1.8)}
+.info-card{position:relative;overflow:hidden}
+.info-card:after{content:"";position:absolute;right:18px;top:18px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.take{transition:transform .2s}
+.take:hover{transform:translateX(6px)}
+.btn,.link-demo{transition:transform .18s,background .18s}
+.btn:hover,.link-demo:hover{transform:translateY(-2px)}
+.browser{transform:rotate(1deg);transition:transform .25s}
+.browser:hover{transform:rotate(0deg) translateY(-4px)}
+::selection{background:var(--accent);color:white}
+@media(max-width:800px){
+ .page:after{background-image:none}
+ .browser{transform:none}
+}
+</style>
+
+
+<style>
+:root{--bg:#070b18;--dark:#101a32;--card:#111c34;--line:#293b5d;--accent:#9657ff}
+body{background:#070b18;color:#f7f9ff}
+.page{background:radial-gradient(circle at 85% 10%,rgba(150,87,255,.16),transparent 25%),radial-gradient(circle at 12% 80%,rgba(35,215,239,.08),transparent 25%)}
+.topbar{border-bottom-color:#293b5d}
+.brand{color:#23d7ef}
+.btn,.back{background:linear-gradient(135deg,#aa65ff,#7842df);box-shadow:0 0 30px rgba(150,87,255,.25)}
+.nav-card,.info-card,.take,.reflection,.quote-box{background:linear-gradient(145deg,#12203d,#0e1930);border-color:#293b5d;box-shadow:0 14px 35px rgba(0,0,0,.25)}
+.nav-card:hover,.info-card:hover{border-color:#536c9e}
+.hero-art .circle{border-color:#9657ff;box-shadow:0 0 50px rgba(150,87,255,.35),0 0 0 24px rgba(35,215,239,.05)}
+.hero-art:after{border-color:#23d7ef;box-shadow:0 0 35px rgba(35,215,239,.3)}
+</style>
+</head>
+<body>
+
+<section id="home" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</span></div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">EMPOWERMENT TECHNOLOGY</div>
+      <h1>Basic<br>Web Page<br>Creation</h1>
+      <p class="lead">From a simple idea to a page people can explore. A test place that contains what Group 5 learned in their reporting and lesson.</p>
+      <a class="btn" href="#navigation">Explore the basics →</a>
+      <div class="meta"><span>Presented by: Group 5</span><span>Grade & Section: 12 St. Ignatius de Loyola</span></div>
+    </div>
+    <div class="hero-art"><div class="circle"></div><div class="label">DESIGN • CONNECT • SHARE</div></div>
+  </div>
+</section>
+
+<section id="navigation" class="page nav-page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">NAVIGATION PAGE</span></div>
+  <div class="section-head">
+    <div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Table of<br>Contents</h2><p class="lead">Choose a section. Each item takes you directly to that part of the site.</p></div>
+    <div class="count">02 / 08</div>
+  </div>
+  <div class="nav-grid">
+    <a class="nav-card" href="#intro"><span class="num">01</span><div><h3>Introduction to Web Pages</h3><p>The purpose of a web page ↗</p></div></a>
+    <a class="nav-card" href="#wysiwyg"><span class="num">02</span><div><h3>Understanding WYSIWYG</h3><p>Design visually, without coding everything ↗</p></div></a>
+    <a class="nav-card" href="#msword"><span class="num">03</span><div><h3>Web Page Creation using MS Word</h3><p>Customize, host, and publish ↗</p></div></a>
+    <a class="nav-card" href="#elements"><span class="num">04</span><div><h3>Elements of a Good Web Page</h3><p>Content, layout, and navigation ↗</p></div></a>
+    <a class="nav-card" href="#conclusion"><span class="num">05</span><div><h3>Conclusion & Reflection</h3><p>Key ideas to remember ↗</p></div></a>
+    <a class="nav-card" href="#demo"><span class="num">06</span><div><h3>Explore our Web Page</h3><p>Applying the lesson ↗</p></div></a>
+  </div>
+  <a class="back" href="#home">Head back to Home →</a>
+</section>
+
+<section id="intro" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">TUTORIAL 01 • CREATE A WEB PAGE USING MS WORD</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Introduction to<br>Web Pages</h2></div><div class="count">03 / 08</div></div>
+  <div class="content-grid">
+    <div class="big-copy">Introducing<br>Web Page</div>
+    <div class="small-copy">A web page is a page on the internet that you can open using a web browser. It can show words, pictures, videos, and links to help you learn, play, or find information.</div>
+  </div>
+  <div class="quote-box">A web page is a place where information can be presented and explored through a browser.</div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<section id="wysiwyg" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">TUTORIAL 02 • SAVE YOUR PAGE AS HTML</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>What is<br>WYSIWYG?</h2></div><div class="count">04 / 08</div></div>
+  <div class="content-grid">
+    <div class="big-copy">Understanding<br>“WYSIWYG”</div>
+    <div class="small-copy">WYSIWYG means “What You See Is What You Get.” It lets you create a web page and see how it looks while making it. It means what you see while editing is how it will look when finished.</div>
+  </div>
+  <div class="quote-box">Visual editing makes creating a web page easier because you can see the result while you work.</div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<section id="msword" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">TUTORIAL • CREATE A WEB PAGE USING MS WORD</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Web Page<br>Creation using<br>MS Word</h2></div><div class="count">05 / 08</div></div>
+  <div class="content-grid">
+    <div class="big-copy">Create it.<br>Customize it.<br>Publish it.</div>
+    <div class="small-copy"><p>This section follows the presentation's MS Word web-page topic.</p><a class="btn" href="#demo" style="margin-top:25px">Watch the video tutorial →</a></div>
+  </div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<section id="elements" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">04 • ELEMENTS OF A GOOD WEB PAGE</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Good websites are useful,<br>clear, and easy to explore.</h2></div><div class="count">06 / 08</div></div>
+  <p class="small-copy">Each element has a job. Together, they help visitors understand the content and find what they need.</p>
+  <div class="cards4">
+    <div class="info-card"><span class="num">01</span><h3>Navigation</h3><p>Helps visitors move between sections.</p></div>
+    <div class="info-card"><span class="num">02</span><h3>Text & headings</h3><p>Organizes information and makes it readable.</p></div>
+    <div class="info-card"><span class="num">03</span><h3>Images & graphics</h3><p>Make ideas more visual and engaging.</p></div>
+    <div class="info-card"><span class="num">04</span><h3>Links & buttons</h3><p>Connect pages, resources, and actions.</p></div>
+  </div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<section id="demo" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">06 • EXPLORE OUR WEB PAGE</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Explore our<br>Web Page.</h2></div><div class="count">07 / 08</div></div>
+  <div class="demo">
+    <div><div class="big-copy">From slides<br>to a website.</div><p class="small-copy" style="margin-top:20px">We applied the lesson by designing a simple website with organized sections, visual elements, and a link to our presentation.</p></div>
+    <div class="browser">
+      <div class="browser-top">YOUR-WEBSITE-LINK-HERE</div>
+      <div class="browser-body"><h3>WEBCRAFT</h3><p>Build. Design. Connect.</p><p>A simple website made to explain the basics of web page creation.</p><a class="link-demo" href="#home">Visit our website ↗</a></div>
+    </div>
+  </div>
+  <div class="takeaways">
+    <div class="take"><b>01</b>Built with a visual website editor</div>
+    <div class="take"><b>02</b>Customized with our own content</div>
+    <div class="take"><b>03</b>Connected using a clickable button</div>
+  </div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<section id="conclusion" class="page">
+  <div class="topbar"><span class="brand">WEBCRAFT</span><span class="kicker">05 • CONCLUSION & REFLECTION</span></div>
+  <div class="section-head"><div><div class="eyebrow">EMPOWERMENT TECHNOLOGY • BASIC WEB PAGE CREATION</div><h2>Key<br>Takeaways</h2></div><div class="count">08 / 08</div></div>
+  <div class="content-grid">
+    <div class="big-copy">A good website is more<br>than just good looks.</div>
+    <div class="small-copy">It should help people find information, understand it, and move around with ease.</div>
+  </div>
+  <div class="takeaways">
+    <div class="take"><b>01</b>WYSIWYG makes visual editing accessible.</div>
+    <div class="take"><b>02</b>Templates save time and provide structure.</div>
+    <div class="take"><b>03</b>Good layout and navigation help users.</div>
+    <div class="take"><b>04</b>Links connect people to useful content.</div>
+  </div>
+  <div class="reflection"><strong>OUR REFLECTION</strong><p>Creating a web page is not only about making it attractive. It is about organizing information and making it easy for people to use.</p><h2 style="font-size:38px;margin-top:30px">THANK YOU</h2></div>
+  <a class="back" href="#navigation">Head back to Navigation →</a>
+</section>
+
+<footer><span>WEBCRAFT</span><span>Design • Connect • Share</span></footer>
+
+<script>
+const progress = document.createElement('div');
+progress.style.cssText =
+'position:fixed;left:0;top:0;height:3px;background:#8b55ff;width:0;z-index:9999;transition:width .08s linear';
+document.body.appendChild(progress);
+window.addEventListener('scroll',()=>{
+ const max=document.documentElement.scrollHeight-innerHeight;
+ progress.style.width=(max>0?(scrollY/max)*100:0)+'%';
+});
+</script>
+
+</body>
+</html>
